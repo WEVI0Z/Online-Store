@@ -41,7 +41,6 @@ const FULLNAMES = [
 ]
 
 const MIN_RATING = 0;
-
 const MAX_RATING = 5;
 
 const CITIES = [
@@ -80,7 +79,7 @@ const MAX_PHOTOS_NUM = 4;
 
 const TYPES = [
   "house",
-  "apatment",
+  "apartment",
   "flat"
 ]
 
@@ -94,21 +93,42 @@ function getRandomNum(minNum, maxNum) {
   return Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
 }
 
-function getRandomIndex(arrLength) {
-  return Math.floor(Math.random() * arrLength);
+function getRandomIndex(arr) {
+  return Math.floor(Math.random() * arr.length);
 }
 
 function createPropertyDate() {
+  function getRandomPhotos(photosNum) {
+    const photosArr = []
+
+    for(let i = 0; i < photosNum; i++) {
+      photosArr.push(PHOTOS[getRandomIndex(PHOTOS)]);
+    }
+
+    return photosArr;
+  }
+
   const object = {
-    name: NAMES[getRandomIndex(NAMES.length)],
-    description: DESCRIPTIONS[getRandomIndex(DESCRIPTIONS.length)],
+    name: NAMES[getRandomIndex(NAMES)],
+    description: DESCRIPTIONS[getRandomIndex(DESCRIPTIONS)],
     price: getRandomNum(MIN_PRICE, MAX_PRICE),
     category: CATEGORY,
     seller: {
-      fullname: FULLNAMES[getRandomIndex(FULLNAMES.length)],
+      fullname: FULLNAMES[getRandomIndex(FULLNAMES)],
       rating: getRandomNum(MIN_RATING, MAX_RATING * 10) / 10
     },
-    publishDate: new Date(currentDate.getFullYear(), getRandomNum(1, currentDate.getMonth()), getRandomNum(1, currentDate.getDate()))
+    publishDate: new Date(currentDate.getFullYear(), getRandomNum(1, currentDate.getMonth()), getRandomNum(1, currentDate.getDate())),
+    address: {
+      city: CITIES[getRandomIndex(CITIES)],
+      street: STREETS[getRandomIndex(STREETS)],
+      building: getRandomNum(MIN_BUILDING_NUM, MAX_BUILDING_NUM)
+    },
+    photos: getRandomPhotos(getRandomNum(MIN_PHOTOS_NUM, MAX_PHOTOS_NUM)),
+    filters: {
+      type: TYPES[getRandomIndex(TYPES)],
+      area: getRandomNum(MIN_AREA, MAX_AREA),
+      roomsCount: getRandomNum(MIN_ROOMS_COUNT, MAX_ROOMS_COUNT)
+    }
   }
 
   return object;
