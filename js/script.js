@@ -97,41 +97,84 @@ function getRandomIndex(arr) {
   return Math.floor(Math.random() * arr.length);
 }
 
-function createPropertyDate() {
-  function getRandomPhotos(photosNum) {
-    const photosArr = []
+const advertsData = [];
 
-    for(let i = 0; i < photosNum; i++) {
-      photosArr.push(PHOTOS[getRandomIndex(PHOTOS)]);
+function createAdvertsArr(arr) {
+  function createAdvertData() {
+    function getRandomPhotos(photosNum) {
+      const photosArr = []
+  
+      for(let i = 0; i < photosNum; i++) {
+        photosArr.push(PHOTOS[getRandomIndex(PHOTOS)]);
+      }
+  
+      return photosArr;
     }
+  
+    const object = {
+      name: NAMES[getRandomIndex(NAMES)],
+      description: DESCRIPTIONS[getRandomIndex(DESCRIPTIONS)],
+      price: getRandomNum(MIN_PRICE, MAX_PRICE / 1000) * 1000,
+      category: CATEGORY,
+      seller: {
+        fullname: FULLNAMES[getRandomIndex(FULLNAMES)],
+        rating: getRandomNum(MIN_RATING, MAX_RATING * 10) / 10
+      },
+      publishDate: new Date(currentDate.getFullYear(), getRandomNum(1, currentDate.getMonth()), getRandomNum(1, currentDate.getDate())),
+      address: {
+        city: CITIES[getRandomIndex(CITIES)],
+        street: STREETS[getRandomIndex(STREETS)],
+        building: getRandomNum(MIN_BUILDING_NUM, MAX_BUILDING_NUM)
+      },
+      photos: getRandomPhotos(getRandomNum(MIN_PHOTOS_NUM, MAX_PHOTOS_NUM)),
+      filters: {
+        type: TYPES[getRandomIndex(TYPES)],
+        area: getRandomNum(MIN_AREA, MAX_AREA),
+        roomsCount: getRandomNum(MIN_ROOMS_COUNT, MAX_ROOMS_COUNT)
+      }
+    }
+    return object;
+  }  
 
-    return photosArr;
+  for(let i = 0; i < 7; i++) {
+    arr.push(createAdvertData());
   }
 
-  const object = {
-    name: NAMES[getRandomIndex(NAMES)],
-    description: DESCRIPTIONS[getRandomIndex(DESCRIPTIONS)],
-    price: getRandomNum(MIN_PRICE, MAX_PRICE),
-    category: CATEGORY,
-    seller: {
-      fullname: FULLNAMES[getRandomIndex(FULLNAMES)],
-      rating: getRandomNum(MIN_RATING, MAX_RATING * 10) / 10
-    },
-    publishDate: new Date(currentDate.getFullYear(), getRandomNum(1, currentDate.getMonth()), getRandomNum(1, currentDate.getDate())),
-    address: {
-      city: CITIES[getRandomIndex(CITIES)],
-      street: STREETS[getRandomIndex(STREETS)],
-      building: getRandomNum(MIN_BUILDING_NUM, MAX_BUILDING_NUM)
-    },
-    photos: getRandomPhotos(getRandomNum(MIN_PHOTOS_NUM, MAX_PHOTOS_NUM)),
-    filters: {
-      type: TYPES[getRandomIndex(TYPES)],
-      area: getRandomNum(MIN_AREA, MAX_AREA),
-      roomsCount: getRandomNum(MIN_ROOMS_COUNT, MAX_ROOMS_COUNT)
-    }
-  }
-
-  return object;
+  return arr;
 }
 
-console.log(createPropertyDate());
+function insertMarkup(wrapper, markup) {
+  wrapper.innerHTML = "";
+  wrapper.insertAdjacentHTML("afterBegin", markup);
+}
+
+function renderAdverts() {
+  const advertsList = document.querySelector(".results__list");
+
+  const advertsMarkup = advertsData.map(() => {
+    return `
+    <li class="results__item product">
+    <button class="product__favourite fav-add" type="button" aria-label="Добавить в избранное">
+      <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M3 7C3 13 10 16.5 11 17C12 16.5 19 13 19 7C19 4.79086 17.2091 3 15 3C12 3 11 5 11 5C11 5 10 3 7 3C4.79086 3 3 4.79086 3 7Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="product__image">
+      <div class="product__image-more-photo hidden">+2 фото</div>
+      <img src="img/house_4.png" width="318" height="220" alt="Загородный дом с видом на озеро">
+    </div>
+    <div class="product__content">
+      <h3 class="product__title">
+        <a href="#">Загородный дом с видом на озеро</a>
+      </h3>
+      <div class="product__price">3 000 000 ₽</div>
+      <div class="product__address">Приозёрск, улица Прибрежная</div>
+      <div class="product__date">Сегодня</div>
+    </div>
+  </li>`;
+
+  insertMarkup(advertsList, advertsMarkup);
+  })
+}
+
+console.log(createAdvertsArr(advertsData));
