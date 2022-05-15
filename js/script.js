@@ -232,7 +232,15 @@ function popUpAdvertControl() {
   }
 
   function createOtherImgsBlock(advert) {
-    return advert.photos.map((itPhoto) => {
+    return advert.photos.map((itPhoto, itIndex) => {
+      if(itIndex == 0) {
+        return `  
+        <li class="gallery__item gallery__item--active">
+          <img src="${itPhoto}" width="124" height="80" alt="${advert.name}">
+        </li>
+        `
+      }
+
       return `  
       <li class="gallery__item">
         <img src="${itPhoto}" width="124" height="80" alt="${advert.name}">
