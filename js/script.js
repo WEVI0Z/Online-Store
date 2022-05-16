@@ -253,7 +253,7 @@ function popUpAdvertControl() {
     hangAllHandlers();
     popUpDateBlock.textContent = makeUpTheDate(advert.publishDate);
     popUpNameBlock.textContent = advert.name;
-    popUpPriceBlock.textContent = advert.price;
+    popUpPriceBlock.textContent = advert.price + " ₽";
     popUpMainImgBlock.src = advert.photos[0];
     popUpSellerNameBlock.textContent = advert.seller.fullname;
     popUpSellerRatingBlock.textContent = advert.seller.rating;
