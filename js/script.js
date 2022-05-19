@@ -219,10 +219,12 @@ function popUpAdvertControl() {
 
   function hangAllHandlers() {
     popUpCloseButton.addEventListener("click", closeButtonClickHandler);
+    document.addEventListener("keydown", closeButtonEscKeyHandler);
   }
 
   function removeAllHandlers() {
     popUpCloseButton.removeEventListener("click", closeButtonClickHandler);
+    document.removeEventListener("keydown", closeButtonEscKeyHandler);
   }
 
   function closePopUp() {
@@ -287,6 +289,16 @@ function popUpAdvertControl() {
     const advertData = advertsData[targetAdvert.dataset.index];
 
     openPopUp(advertData);
+  }
+
+  function closeButtonEscKeyHandler(evt) {
+    evt.preventDefault();
+
+    if(evt.code == "Escape") {
+      closePopUp();
+    } else if(evt.code == "Enter") {
+      closePopUp();
+    }
   }
 
   function closeButtonClickHandler(evt) {
