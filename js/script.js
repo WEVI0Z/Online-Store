@@ -301,9 +301,14 @@ function popUpAdvertControl() {
     evt.preventDefault();
 
     const targetAdvert = evt.target.closest("li");
-    const advertData = advertsData[targetAdvert.dataset.index];
+    const targetImg = evt.target.closest("img");
+    const targetLink = evt.target.closest("a");
 
-    openPopUp(advertData);
+    if (targetImg || targetLink) {
+      const advertData = advertsData[targetAdvert.dataset.index];
+  
+      openPopUp(advertData);
+    }
   }
 
   function closeButtonEscKeyHandler(evt) {
