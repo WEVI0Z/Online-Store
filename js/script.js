@@ -1,5 +1,7 @@
 "use strict"
 
+// import {getCardsData} from './backend.js';
+
 var mySlider = new rSlider({
   target: '#sampleSlider',
   values: [10000, 1000000],
@@ -11,6 +13,8 @@ var mySlider = new rSlider({
 });
 
 const currentDate = new Date();
+
+const CARDS_ADDRESS = "https://morfey216.github.io/online-store-bd/bd.json";
 
 const NAMES = [
   "Двушка в центре Питера",
@@ -97,7 +101,18 @@ function getRandomIndex(arr) {
   return Math.floor(Math.random() * arr.length);
 }
 
-const advertsData = [];
+let advertsData = [];
+
+async function getCardsData(onLoad, onError) {
+  const response = await fetch(CARDS_ADDRESS);
+
+  if(response.ok) {
+    const data = await response.json();
+     onLoad(data); 
+  } else {
+      onError(response.status);
+  }
+}
 
 function createAdvertsArr(arr) {
   function createAdvertData() {
@@ -310,8 +325,22 @@ function popUpAdvertControl() {
   advertsList.addEventListener("click", cardsClickHandler);
 }
 
-createAdvertsArr(advertsData);
-renderAdverts();
+function refreshAdvertsData(data) {
+  advertsData = data.products;
+  console.log(advertsData);
+  advertsData.map((itAdvert) => {
+    itAdvert.publishDate = new Date(currentDate.getFullYear(), getRandomNum(1, currentDate.getMonth()), getRandomNum(1, currentDate.getDate()));
+  });
+  renderAdverts();
+}
+
+function processTheErrorResponse(status) {
+  console.log(status, "ERROR");
+}
+
+// createAdvertsArr(advertsData);
+getCardsData(refreshAdvertsData, processTheErrorResponse);
+// renderAdverts();
 popUpAdvertControl();
 
 console.log(advertsData);
